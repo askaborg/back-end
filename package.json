@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env DB_ENV=testing jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
@@ -34,6 +34,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jest": "^26.0.1",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
   }
 }
