@@ -18,13 +18,13 @@ function add(newTask) {
     .insert(newTask)
 }
 
-function remove(id) {
+function remove(removeTask) {
     return db("tasks")
-        .where(id)
+        .where(removeTask)
         .del()
 }
 
-function findTask() {
+function findTask(task) {
     return db("tasks")
-        // .where(Id)
+        .where({task})
 }

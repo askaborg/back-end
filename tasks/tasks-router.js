@@ -48,16 +48,17 @@ router.delete("/", async (req, res) => {
         if (activeCategories.some(categoryExists)) {
           const { id } = activeCategories.find(obj => obj.category === category)
           const catId = id
-          const activeTasks = await Tasks.findBy(userId, catId)
-          console.log("Tasks", activeTasks)
-        //   await Tasks.remove(id)
-          res.status(200).json({ message: "Category deleted." })
+          const removeTask = { task: task, catId: catId, userId: userId }
+          await Tasks.remove(removeTask)
+          res.status(200).json({ message: "Task deleted." })
         } else {
           res.status(400).json({ message: "You don't have that category." })
         }
       } catch (err) {
         res.status(500).json(err)
       }
+    } else {
+        res.status(406).json({ message: "You need a category and task"})
     }
   })
 
