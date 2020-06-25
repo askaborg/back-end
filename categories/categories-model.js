@@ -1,9 +1,10 @@
-const db = require("../database/dbConfig.js")
-const { findBy } = require("../users/user-model.js")
+const db = require("../database/dbConfig")
 
 module.exports = {
   userCategories,
-  add
+  add,
+  remove,
+  modify
 }
 
 function userCategories(userId) {
@@ -14,4 +15,16 @@ function userCategories(userId) {
 function add(newCategory) {
   return db("categories")
     .insert(newCategory)
+}
+
+function modify(change, id) {
+  return db("categories")
+    .where({id})
+    .update({ category: change })
+}
+
+function remove(id) {
+  return db("categories")
+    .where({id})
+    .del()
 }

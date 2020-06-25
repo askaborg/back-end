@@ -2,9 +2,13 @@ const db = require("../database/dbConfig.js")
 
 module.exports = {
     add,
-    findBy
+    findBy,
+    list
 }
 
+function list() {
+    return db("users").select("username")
+}
 function add(credentials) {
     return db("users")
         .insert(credentials)
