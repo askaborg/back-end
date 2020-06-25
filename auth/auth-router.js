@@ -3,6 +3,15 @@ const bc = require("bcryptjs")
 const generateToken = require("./generateToken.js")
 const Users = require("../users/user-model.js")
 
+router.get("/", async (req, res) => {
+  try {
+    const userList = await Users.list()
+    res.status(200).json({ userList })
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
+
 router.post("/register", async (req, res) => {
   const { username, password } = req.body
   if (username && password) {
@@ -24,8 +33,7 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body
   if (username && password) {
     try {
-      const user = await Users.findBy({ username })
-      .first()
+      const user = await Users.findBy({ username }).first()
       if (user && bc.compareSync(password, user.password)) {
         const token = generateToken(user)
         res.status(200).json({ token: token })
