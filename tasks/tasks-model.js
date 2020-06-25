@@ -10,7 +10,7 @@ function userCategories(userId) {
     .where({userId})
 }
 
-function add(newCategory) {
-  return db("categories")
-    .insert(newCategory)
+function add(newTask) {
+  return db("tasks")
+    .insert(newTask)
 }
