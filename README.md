@@ -19,6 +19,7 @@
 ### https://wunderlist3.herokuapp.com/api/category
 
 ## Update a category JSON { "category": "Required", "change": "Required" }
+## "change": "is the category name to update to"
 ### https://wunderlist3.herokuapp.com/api/category
 
 ## Delete a category JSON { "category": "Required" }
@@ -32,6 +33,7 @@
 ### https://wunderlist3.herokuapp.com/api/task
 
 ## Update task JSON { "category": "Required", "task": "Required", "description": "Optional", "scheduled": "Optional", "changeTask": "Optional" }
+## "changeTask": "is the task name to update to"
 ### https://wunderlist3.herokuapp.com/api/task
 
 ## Delete a task JSON { "category": "Required", "task": "Required" }
