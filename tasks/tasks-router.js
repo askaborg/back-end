@@ -37,6 +37,51 @@ router.post("/", async (req, res) => {
     }
 })
 
+router.put("/", async (req, res) => {
+    const { id } = req.decodedJwt
+    const userId = id
+    const { category, task } = req.body
+
+    if (category && task ) {
+        try {
+            const activeCategories = await Categories.userCategories(id)
+            const categoryExists = obj => obj.category === category
+            
+            if (activeCategories.some(categoryExists)) {
+                const { id } = activeCategories.find(obj => obj.category === category)
+                const catId = id
+                const taskToModify = await Tasks.find(task, catId, userId).first()
+                if (taskToModify) {
+                    const { description, scheduled, completed, changeTask } = req.body
+                    const { id } = taskToModify
+                    const taskId = id
+                    if (description) {
+                        await Tasks.modDescription(taskId, description)
+                    }
+                    if (scheduled) {
+                        await Tasks.modScheduled(taskId, scheduled)
+                    }
+                    if (completed) {
+                        await Tasks.modCompleted(taskId, completed)
+                    }
+                    if (changeTask) {
+                        await Tasks.modTask(taskId, changeTask)
+                    }
+                    res.status(200).json({ message: "Task modified." })
+                } else {
+                    res.status(406).json({ message: "No task in category." })
+                }
+            } else {
+                res.status(406).json({ message: "You don't even have that category." })
+            }
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    } else {
+        res.status(406).json({ message: "You need a category and task." })
+    }
+})
+
 router.delete("/", async (req, res) => {
     const { id } = req.decodedJwt
     const { category, task } = req.body
@@ -48,9 +93,14 @@ router.delete("/", async (req, res) => {
         if (activeCategories.some(categoryExists)) {
           const { id } = activeCategories.find(obj => obj.category === category)
           const catId = id
-          const removeTask = { task: task, catId: catId, userId: userId }
-          await Tasks.remove(removeTask)
-          res.status(200).json({ message: "Task deleted." })
+          const taskToRemove = await Tasks.find(task, catId, userId).first()
+          console.log("ttr", taskToRemove)
+          if (taskToRemove) {
+            const { id } = taskToRemove
+            const taskId = id
+            await Tasks.remove(taskId)
+            res.status(200).json({ message: "Task deleted." })
+          }
         } else {
           res.status(400).json({ message: "You don't have that category." })
         }
@@ -58,7 +108,7 @@ router.delete("/", async (req, res) => {
         res.status(500).json(err)
       }
     } else {
-        res.status(406).json({ message: "You need a category and task"})
+        res.status(406).json({ message: "You need a category and task." })
     }
   })
 
